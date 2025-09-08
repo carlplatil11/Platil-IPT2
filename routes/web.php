@@ -14,5 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('Home');
+})->where('any', '^.(?!api).*$');
+
+Route::get('/about', function () {
+    return '<h1>About Page</h1><p>This is about wow</p>';
 });
