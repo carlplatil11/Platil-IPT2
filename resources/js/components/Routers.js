@@ -1,15 +1,30 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes} from "react-router-dom"
-import ReactDom from "react-dom";
-import example from "./Example";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import Home from "./Home";
+import AboutUs from "./AboutUs";
+import ContactUs from "./ContactUs";
+import Navbar from "./Navbar";
+import Login from "./Login";
+
 
 export default function Routers() {
     return (
         <Router>
-            <Routes>
-                <Route path="/Example" element={<example />} />
-                <Routere path="/Home" element={<Home />} />
-            </Routes>
+            <Navbar />
+            <div className="page-content">
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/aboutus" element={<AboutUs />} />
+                    <Route path="/contactus" element={<ContactUs />} />
+                    <Route path="/login" element={<Login />} />
+                </Routes>
+            </div>
         </Router>
-    )
+    );
+}
+
+if (document.getElementById('root')) {
+    ReactDOM.render(<Routers />, document.getElementById('root')); 
 }
