@@ -1,189 +1,423 @@
-$primary-color: #1e88e5; // Vibrant blue to match home page
-$accent-color: #ff8f00; // Warm orange for highlights
-$light-color: #ffffff; // Clean white for text
-$dark-color: #0d47a1; // Deep blue for depth
+// Enhanced Navbar SCSS
+// Variables
+$primary-color: #0066ff;
+$primary-dark: #0052cc;
+$accent-color: #ff6b35;
+$accent-light: #ff8f5a;
+$text-light: #ffffff;
+$text-muted: rgba(255, 255, 255, 0.8);
+$glass-bg: rgba(255, 255, 255, 0.08);
+$glass-border: rgba(255, 255, 255, 0.12);
 
-.navbar {
-  display: flex !important;
-  justify-content: space-between;
-  align-items: center;
-  background: linear-gradient(90deg, $primary-color 0%, darken($primary-color, 10%) 100%);
-  padding: 15px 60px;
-  box-shadow: 0 5px 15px rgba($dark-color, 0.3);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  min-height: 70px;
-  border-bottom: 2px solid $accent-color;
-  backdrop-filter: blur(12px);
-  transition: all 0.3s ease;
+// Shadows
+$shadow-1: 0 4px 20px rgba(0, 102, 255, 0.15);
+$shadow-2: 0 8px 30px rgba(0, 102, 255, 0.25);
+$shadow-accent: 0 4px 12px rgba(255, 107, 53, 0.3);
+$shadow-accent-hover: 0 8px 25px rgba(255, 107, 53, 0.4);
 
-  // Subtle scale effect on hover
-  &:hover {
-    box-shadow: 0 8px 20px rgba($dark-color, 0.4);
-  }
+// Gradients
+$gradient-primary: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
+$gradient-accent: linear-gradient(45deg, $accent-color, $accent-light);
+$gradient-accent-hover: linear-gradient(45deg, $accent-light, $accent-color);
 
-  // Decorative glow line
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, $accent-color, transparent);
-    animation: glowLine 6s ease-in-out infinite;
-  }
+// Transitions
+$transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-ease: all 0.3s ease;
+
+// Font families
+$font-primary: 'Inter', sans-serif;
+$font-brand: 'Space Grotesk', sans-serif;
+
+// Breakpoints
+$mobile: 768px;
+
+// Mixins
+@mixin glass-effect($opacity: 0.1) {
+  background: rgba(255, 255, 255, $opacity);
+  backdrop-filter: blur(20px) saturate(1.8);
+  border: 1px solid $glass-border;
 }
 
-.navbar-brand {
+@mixin hover-lift($y: -2px) {
+  transform: translateY($y);
+  transition: $transition-smooth;
+}
+
+@mixin flex-center {
   display: flex;
   align-items: center;
-  color: $light-color;
-  font-size: 1.8rem;
-  font-weight: 700;
-  font-family: 'Montserrat', sans-serif;
-  text-decoration: none;
-  padding: 8px 15px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  justify-content: center;
+}
 
-  // Subtle shine effect
+@mixin button-style {
+  padding: 10px 18px;
+  border-radius: 12px;
+  transition: $transition-smooth;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+
+// Reset
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+// Base styles
+body {
+  font-family: $font-primary;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding-top: 90px;
+}
+
+// Navbar component
+.navbar {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 40px);
+  max-width: 1200px;
+  height: 70px;
+  z-index: 1000;
+  overflow: hidden;
+  
+  @include glass-effect();
+  @include flex-center;
+  
+  border-radius: 20px;
+  justify-content: space-between;
+  padding: 0 30px;
+  box-shadow: $shadow-1;
+  transition: $transition-smooth;
+
+  // Animated shine effect
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: -100%;
-    width: 50%;
+    width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba($accent-color, 0.2), transparent);
-    transition: all 0.5s ease;
-  }
-
-  &:hover::before {
-    left: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.8s ease;
   }
 
   &:hover {
-    color: $accent-color;
-    transform: translateY(-1px);
+    box-shadow: $shadow-2;
+    transform: translateX(-50%) translateY(-2px);
+
+    &::before {
+      left: 100%;
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: $mobile) {
+    width: calc(100% - 20px);
+    top: 10px;
+    padding: 0 20px;
+    height: 60px;
+  }
+}
+
+// Brand section
+.navbar-brand {
+  @include flex-center;
+  text-decoration: none;
+  font-family: $font-brand;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: $text-light;
+  position: relative;
+  z-index: 2;
+  transition: $transition-ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: $mobile) {
+    font-size: 1.3rem;
   }
 }
 
 .navbar-logo {
-  height: 40px;
-  width: auto;
-  margin-right: 10px;
-  border-radius: 50%;
-  border: 2px solid rgba($accent-color, 0.5);
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: scale(1.1);
-    border-color: $accent-color;
-  }
-}
-
-.navbar-links {
-  list-style: none !important;
-  display: flex !important;
-  gap: 20px;
-  margin: 0;
-  padding: 0;
-  align-items: center;
-}
-
-.navbar-links li a {
-  color: $light-color;
-  text-decoration: none;
-  font-size: 1.1rem;
-  font-weight: 500;
-  font-family: 'Roboto', sans-serif;
-  padding: 10px 20px;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-  position: relative;
-
-  // Underline animation on hover
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background: $accent-color;
-    transition: all 0.3s ease;
-    transform: translateX(-50%);
-  }
-
-  &:hover::after {
-    width: 70%;
-  }
-
-  &:hover {
-    color: $accent-color;
-    background: rgba($light-color, 0.1);
-    transform: translateY(-2px);
-  }
-
-  // Specific styles for each link
-  &[href="#home"] {
-    animation: pulseLink 3s ease-in-out infinite;
-  }
-
-  &[href="#about-us"] {
-    animation: pulseLink 3.2s ease-in-out infinite;
-  }
-
-  &[href="#contact-us"] {
-    background: linear-gradient(45deg, $accent-color, lighten($accent-color, 10%));
-    color: $dark-color;
-    padding: 10px 25px;
-    font-weight: 600;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba($accent-color, 0.3);
-
-    &:hover {
-      background: linear-gradient(45deg, darken($accent-color, 10%), $accent-color);
-      transform: translateY(-3px);
-      box-shadow: 0 6px 15px rgba($accent-color, 0.4);
-    }
-
-    &::after {
-      display: none; // Remove underline for Contact Us button
-    }
-  }
-}
-
-.navbar-links li a.active,
-.navbar-links li a[aria-current="page"] {
-  color: $accent-color;
-  background: rgba($light-color, 0.15);
+  width: 35px;
+  height: 35px;
+  background: $gradient-accent;
+  border-radius: 12px;
+  margin-right: 12px;
+  font-size: 1.2rem;
+  color: white;
   font-weight: 600;
-  border-radius: 10px;
+  box-shadow: $shadow-accent;
+  transition: $transition-ease;
+  
+  @include flex-center;
+
+  &:hover {
+    transform: rotate(5deg) scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+  }
+
+  @media (max-width: $mobile) {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+}
+
+// Navigation links
+.navbar-links {
+  display: flex;
+  list-style: none;
+  gap: 8px;
+  align-items: center;
+
+  li a {
+    @include flex-center;
+    @include button-style;
+    
+    gap: 8px;
+    color: $text-muted;
+    font-size: 0.95rem;
+
+    // Glass effect overlay
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: $glass-bg;
+      border-radius: 12px;
+      opacity: 0;
+      transition: $transition-ease;
+    }
+
+    // Icon styling
+    i {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      transition: $transition-ease;
+    }
+
+    // Hover effects
+    &:hover {
+      color: $text-light;
+      @include hover-lift(-1px);
+
+      &::before {
+        opacity: 1;
+      }
+
+      i {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+    }
+
+    // Active state
+    &.active {
+      color: $text-light;
+      background: $glass-bg;
+      backdrop-filter: blur(10px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+      i {
+        color: $accent-color;
+      }
+    }
+  }
+
+  // Responsive mobile menu
+  @media (max-width: $mobile) {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    padding: 20px;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 200px;
+    transform: translateY(-10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: $transition-smooth;
+    border: 1px solid $glass-border;
+
+    &.active {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    li a {
+      width: 100%;
+      justify-content: flex-start;
+      padding: 12px 16px;
+    }
+  }
+}
+
+// CTA Button
+.cta-button {
+  background: $gradient-accent !important;
+  color: white !important;
+  font-weight: 600 !important;
+  padding: 12px 24px !important;
+  border-radius: 14px !important;
+  box-shadow: $shadow-accent !important;
+
+  &::before {
+    background: $gradient-accent-hover !important;
+  }
+
+  &:hover {
+    @include hover-lift(-2px);
+    box-shadow: $shadow-accent-hover !important;
+  }
+}
+
+// Mobile menu toggle
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: $text-light;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: $transition-ease;
+
+  &:hover {
+    background: $glass-bg;
+  }
+
+  @media (max-width: $mobile) {
+    display: block;
+  }
+}
+
+// Progress indicator
+.progress-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: $gradient-accent;
+  width: 30%;
+  border-radius: 2px;
+  animation: progress 4s ease-in-out infinite;
 }
 
 // Animations
-@keyframes glowLine {
-  0% {
-    transform: translateX(-100%);
+@keyframes progress {
+  0%, 100% { 
+    transform: translateX(0); 
+    width: 30%; 
   }
-  50% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
+  50% { 
+    transform: translateX(200%); 
+    width: 40%; 
   }
 }
 
-@keyframes pulseLink {
-  0%, 100% {
-    transform: scale(1);
+// Demo content styles (optional)
+.demo-content {
+  padding: 40px 20px;
+  text-align: center;
+  color: white;
+  max-width: 800px;
+  margin: 0 auto;
+
+  h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    font-family: $font-brand;
+
+    @media (max-width: $mobile) {
+      font-size: 2rem;
+    }
   }
-  50% {
-    transform: scale(1.03);
+
+  p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    line-height: 1.6;
+
+    @media (max-width: $mobile) {
+      font-size: 1rem;
+    }
+  }
+}
+
+// Utility classes
+.text-center { text-align: center; }
+.text-light { color: $text-light; }
+.text-muted { color: $text-muted; }
+
+.bg-glass {
+  @include glass-effect();
+}
+
+.shadow-1 { box-shadow: $shadow-1; }
+.shadow-2 { box-shadow: $shadow-2; }
+
+.transition-smooth { transition: $transition-smooth; }
+.transition-ease { transition: $transition-ease; }
+
+// Advanced hover effects for premium feel
+.navbar-links li a {
+  &:not(.cta-button) {
+    position: relative;
+
+    // Ripple effect on click
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s ease, height 0.3s ease;
+    }
+
+    &:active::after {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+// Scroll-based navbar behavior (requires JavaScript)
+.navbar {
+  &.navbar-hidden {
+    transform: translateX(-50%) translateY(-100%);
+  }
+
+  &.navbar-visible {
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+// Dark mode support (optional)
+@media (prefers-color-scheme: dark) {
+  .navbar {
+    background: rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.1);
   }
 }

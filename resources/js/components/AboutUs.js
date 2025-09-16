@@ -3,15 +3,6 @@ import React from "react";
 export default function AboutUs() {
   return (
     <div className="aboutus-page">
-      {/* Header */}
-      <header className="site-header">
-        <div className="logo">MyCompany</div>
-        <nav>
-          <a href="#aboutus">About Us</a>
-          <a href="#contactus">Contact</a>
-        </nav>
-      </header>
-
       {/* Page content */}
       <div className="content-wrapper">
         <h1>About Us</h1>
