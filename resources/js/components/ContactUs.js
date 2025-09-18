@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+
+axios.defaults.baseURL = "http://localhost:8000";
+
 
 export default function ContactUs() {
   const [formData, setFormData] = useState({
@@ -7,15 +11,84 @@ export default function ContactUs() {
     message: "",
   });
 
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+  axios
+    .get("/api/contact")
+    .then((response) => setMessages(response.data))
+    .catch((error) => console.error("Error fetching messages:", error));
+}, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    alert(`Thank you, ${formData.name}! Your message has been sent.`);
-    setFormData({ name: "", email: "", message: "" });
+  e.preventDefault();
+
+  console.log("Submitting form data:", formData);
+
+  if (formData.id) {
+    // Update existing message
+    axios
+      .put(`/api/contact/${formData.id}`, formData)
+      .then((response) => {
+        setMessages(
+          messages.map((message) =>
+            message.id === formData.id ? response.data : message
+          )
+        );
+        setFormData({ name: "", email: "", message: "" }); // Clear the form
+        alert(`Message ID: ${formData.id} has been updated.`);
+      })
+      .catch((error) => {
+        console.error("Error updating message:", error.response?.data || error.message);
+        alert("Failed to update the message. Please check the console for details.");
+      });
+  } else {
+    // Create new message
+    axios
+      .post("/api/contact", formData)
+      .then((response) => {
+        setMessages([...messages, response.data]); // Add the new message to the table
+        setFormData({ name: "", email: "", message: "" }); // Clear the form
+        alert(`Thank you, ${formData.name}! Your message has been sent.`);
+      })
+      .catch((error) => {
+        console.error("Error submitting message:", error.response?.data || error.message);
+        alert("Failed to submit the message. Please check the console for details.");
+      });
+  }
+};
+
+  const handleEdit = (id) => {
+    const messageToEdit = messages.find((message) => message.id === id);
+    if (messageToEdit) {
+      setFormData({
+        id: messageToEdit.id,
+        name: messageToEdit.name,
+        email: messageToEdit.email,
+        message: messageToEdit.message,
+      });
+      alert(`Editing message ID: ${id}. Update the form and submit.`);
+    } else {
+      alert("Message not found.");
+    }
+  };
+
+  const handleDelete = (id) => {
+    axios
+      .delete(`/api/contact/${id}`)
+      .then(() => {
+        setMessages(messages.filter((message) => message.id !== id));
+        alert(`Message ID: ${id} has been deleted.`);
+      })
+      .catch((error) => {
+        console.error("Error deleting message:", error.response?.data || error.message);
+        alert("Failed to delete the message. Please check the console for details.");
+      });
   };
 
   return (
@@ -71,6 +144,34 @@ export default function ContactUs() {
           />
           <button type="submit">Send Message</button>
         </form>
+
+        {/* Messages Table */}
+        <div className="messages-table">
+          <h2>Messages</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Message</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {messages.map((message) => (
+                <tr key={message.id}>
+                  <td>{message.name}</td>
+                  <td>{message.email}</td>
+                  <td>{message.message}</td>
+                  <td>
+                    <button onClick={() => handleEdit(message.id)}>Edit</button>
+                    <button onClick={() => handleDelete(message.id)}>Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   );

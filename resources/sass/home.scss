@@ -93,6 +93,7 @@ body {
       margin: 0 0 $padding;
       background: linear-gradient(45deg, $primary-color, $accent-color);
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: glowText 3s ease-in-out infinite;
     }

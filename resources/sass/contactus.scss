@@ -123,6 +123,65 @@
       }
     }
   }
+
+  /* Messages Table */
+  .messages-table {
+    margin-top: 40px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 12px 30px rgba(13, 71, 161, 0.2);
+
+    h2 {
+      margin-bottom: 20px;
+      color: #1e88e5;
+      font-size: 1.8rem;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid rgba(30, 136, 229, 0.2);
+      }
+
+      th {
+        background: #1e88e5;
+        color: #fff;
+        font-weight: bold;
+      }
+
+      tr:hover {
+        background: rgba(30, 136, 229, 0.1);
+      }
+
+      button {
+        background: #ff8f00;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: #ffa733;
+          box-shadow: 0 5px 15px rgba(30, 136, 229, 0.2);
+        }
+
+        &:not(:last-child) {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
 }
 
 /* Floating decorative bubbles */
